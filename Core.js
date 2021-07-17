@@ -1,7 +1,6 @@
 
 var arrayPrototype = Array.prototype;
-// slice = arrayPrototype.slice,
-// supportsSliceOnNodeList = true;
+
 let propToString = Object.prototype.toString
 
 export default {
