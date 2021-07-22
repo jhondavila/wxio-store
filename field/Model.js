@@ -11,9 +11,10 @@ class FModel extends Field {
 
     isNested = true;
 
-    ctModel = null;
+    model = null;
     constructor(config) {
         super(config)
+        this.model = new Model(this);
     }
 
     getData(v, model, options) {
@@ -22,10 +23,10 @@ class FModel extends Field {
 
     register(parentModel, field) {
         let model;
-        if (!this.ctModel) {
-            this.ctModel = new Model(field);
-        }
-        model = this.ctModel;
+        // if (!this.ctModel) {
+        //     this.ctModel = new Model(field);
+        // }
+        model = this.model;
 
         let attribute;
         if (Core.isString(field)) {
@@ -67,10 +68,10 @@ class FModel extends Field {
 
     applyInit(parentModel, field) {
         let model;
-        if (!this.ctModel) {
-            this.ctModel = Model(field);
-        }
-        model = this.ctModel;
+        // if (!this.ctModel) {
+        //     this.ctModel = Model(field);
+        // }
+        model = this.model;
 
 
         let attribute;

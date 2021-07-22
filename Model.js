@@ -802,7 +802,32 @@ class BaseModel {
 
         Model.entityName = options.name;
         Model.idProperty = options.idProperty || "id";
-        Model.fields = compileFields
+        Model.fields = compileFields;
+        Model.schemaValidator = schemaValidator;
+
+        Model.schemaValidator.disabledRule = (field) => {
+            let rule = schemaValidator.rules[field];
+            if(rule){
+                schemaValidator.disabledRules = schemaValidator.disabledRules || {};
+                schemaValidator.disabledRules[field] = rule;
+                delete schemaValidator.rules[field];
+                return true;
+            }else{
+                return false;
+            }
+            
+        }
+
+        Model.schemaValidator.enabledRule = (field) => {
+            schemaValidator.disabledRules = schemaValidator.disabledRules || {};
+            if(schemaValidator.disabledRules[field]){
+                let rule = schemaValidator.disabledRules[field];
+                schemaValidator.rules[field] = rule;
+                return true;
+            }else{
+                return false;
+            }
+        }
         return Model;
     }
 
