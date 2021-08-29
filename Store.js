@@ -20,6 +20,12 @@ class Store extends EventEmitter {
     /**
      * @private
      */
+     errorRequest = false
+     statusRequest = 200
+
+    /**
+     * @private
+     */
     filters = []
 
     /**
@@ -193,14 +199,17 @@ class Store extends EventEmitter {
             this.add(propData, true);
             this.loading = false;
 
+            console.log({...this});
+
             this.emit("loading", this, false);
             //if(!opts.silent){
             this.emit("load", this, this.data);
             //}
             return true;
         } catch (error) {
-            console.log(error)
-            // Vue.set(this, 'loading', false);
+            
+            this.errorRequest = {...error}.isAxiosError;
+            this.statusRequest = {...error}.response ? {...error}.response.status :  0;
             this.loading = false;
             this.emit("loading", false);
             return false;
@@ -639,6 +648,7 @@ class Store extends EventEmitter {
                 } else {
                     return false;
                 }
+
             }
         } else {
             return true;
