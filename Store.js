@@ -199,8 +199,6 @@ class Store extends EventEmitter {
             this.add(propData, true);
             this.loading = false;
 
-            console.log({...this});
-
             this.emit("loading", this, false);
             //if(!opts.silent){
             this.emit("load", this, this.data);
