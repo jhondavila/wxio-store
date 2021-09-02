@@ -20,8 +20,8 @@ class Store extends EventEmitter {
     /**
      * @private
      */
-     errorRequest = false
-     statusRequest = 200
+    errorRequest = false
+    statusRequest = 200
 
     /**
      * @private
@@ -186,6 +186,41 @@ class Store extends EventEmitter {
     }
 
 
+
+    async reload() {
+        let page = 1;
+        this.start = (page - 1) * this.pageSize;
+        this.limit = this.pageSize;
+        this.currentPage = page;
+        
+        try {
+            this.loading = true;
+            this.emit("loading", this, true);
+
+            let rs = await this.proxy.load();
+            let propData = rs.data.data;
+            this.clearLoad();
+            this.add(propData, true);
+            this.loading = false;
+
+            console.log({ ...this });
+
+            this.emit("loading", this, false);
+            //if(!opts.silent){
+            this.emit("load", this, this.data);
+            //}
+            return true;
+        } catch (error) {
+
+            this.errorRequest = { ...error }.isAxiosError;
+            this.statusRequest = { ...error }.response ? { ...error }.response.status : 0;
+            this.loading = false;
+            this.emit("loading", false);
+            return false;
+        }
+    }
+
+
     async load() {
         try {
             this.loading = true;
@@ -199,7 +234,7 @@ class Store extends EventEmitter {
             this.add(propData, true);
             this.loading = false;
 
-            console.log({...this});
+            console.log({ ...this });
 
             this.emit("loading", this, false);
             //if(!opts.silent){
@@ -207,9 +242,9 @@ class Store extends EventEmitter {
             //}
             return true;
         } catch (error) {
-            
-            this.errorRequest = {...error}.isAxiosError;
-            this.statusRequest = {...error}.response ? {...error}.response.status :  0;
+
+            this.errorRequest = { ...error }.isAxiosError;
+            this.statusRequest = { ...error }.response ? { ...error }.response.status : 0;
             this.loading = false;
             this.emit("loading", false);
             return false;
