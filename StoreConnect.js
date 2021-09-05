@@ -16,6 +16,7 @@ export const connectToStore = (WrappedComponent, stores) => {
                 store.on("add", this.handleChange)
                 store.on("loading", this.handleChange)
                 store.on("remove", this.handleChange)
+                store.on("import", this.handleImport);
 
                 // 
                 if (store.autoLoad) {
@@ -34,8 +35,18 @@ export const connectToStore = (WrappedComponent, stores) => {
                 store.removeListener("add", this.handleChange);
                 store.removeListener("loading", this.handleChange);
                 store.removeListener("remove", this.handleChange);
+                store.removeListener("import", this.handleImport);
+
             }
             // }
+        }
+        handleImport = () => {
+            if (this.component) {
+                if (this.component.onImport) {
+                    this.component.onImport();
+                }
+            }
+            this.forceUpdate();
         }
 
         handleChange = () => {
