@@ -50,6 +50,7 @@ export const connectToStore = (WrappedComponent, stores) => {
         }
 
         handleChange = () => {
+            console.log(this.props.forwardedRef)
             if (this.component) {
                 if (this.component.onStoreDataChanged) {
                     this.component.onStoreDataChanged();
@@ -59,7 +60,10 @@ export const connectToStore = (WrappedComponent, stores) => {
         }
 
         render() {
-            return <WrappedComponent ref={this.props.forwardedRef} {...this.props} />;
+            return <WrappedComponent ref={(c) => {
+                this.component = c;
+                this.props.forwardedRef(c);
+            }} {...this.props} />;
         }
     }
 
