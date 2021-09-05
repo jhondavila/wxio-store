@@ -1,6 +1,6 @@
 import React from 'react';
 export const connectToStore = (WrappedComponent, stores) => {
-    return class StoreComponent extends React.Component {
+    class StoreConnect extends React.Component {
         constructor(props) {
             super(props);
             // debugger
@@ -59,8 +59,12 @@ export const connectToStore = (WrappedComponent, stores) => {
         }
 
         render() {
-            return <WrappedComponent ref={c => this.component = c} {...this.props} />;
+            return <WrappedComponent ref={this.props.forwardedRef} {...this.props} />;
         }
     }
+
+    return React.forwardRef((props, ref) => {
+        return <StoreConnect {...props} forwardedRef={ref} />;
+    });
 }
 
