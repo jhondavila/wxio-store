@@ -76,6 +76,7 @@ class Store extends EventEmitter {
     constructor(opts) {
         super(opts);
         // if (opts.proxy) {
+        // debugger
         Object.assign(this, opts);
         this.initProxy(opts.proxy || { type: "ajax" });
         // }
@@ -122,10 +123,13 @@ class Store extends EventEmitter {
      */
     initModel(opts) {
         // let model;
-        let model = new Model({
-            fields: opts.fields || {},
-            idProperty: opts.idProperty
-        });
+        let model = opts.model;
+        if (!opts.model) {
+            model = new Model({
+                fields: opts.fields || {},
+                idProperty: opts.idProperty
+            });
+        }
         this.model = model;
     }
 
