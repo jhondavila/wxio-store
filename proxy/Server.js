@@ -21,7 +21,7 @@ class ProxyServer extends ProxyBase {
     }
     store = null;
     constructor(opts) {
-        super();
+        super(opts);
 
         this.api = {
             ...this.api,
@@ -38,6 +38,7 @@ class ProxyServer extends ProxyBase {
         };
         this.store = opts.store;
         this.mode = opts.mode;
+        this.type = opts.type;
     }
 
     async loadRequired(filters, opts) {
@@ -47,7 +48,7 @@ class ProxyServer extends ProxyBase {
         if (opts && opts.staticFilters) {
             let optsFilters = opts.staticFilters;
             let list = [];
-            if(!Array.isArray(optsFilters)){
+            if (!Array.isArray(optsFilters)) {
                 optsFilters = [optsFilters];
             }
             for (let x = 0; x < optsFilters.length; x++) {

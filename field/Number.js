@@ -10,6 +10,9 @@ class FNumber extends Integer {
         this.isIntegerField = false;
         this.isNumberField = true;
         this.numericType = 'float';
+
+        this.stripRe =  /[\$,%]/g;
+
         // this.getNumber = Wx.identityFn;
     }
 
@@ -19,7 +22,15 @@ class FNumber extends Integer {
         // Handle values which are already numbers.
         // Value truncation behaviour of parseInt is historic and must be maintained.
         // parseInt(35.9)  and parseInt("35.9") returns 35
-        return parseFloat(String(v).replace(this.stripRe, ''));
+        if(v){
+            return parseFloat(String(v).replace(this.stripRe, ''));
+
+            //el number tiene menos metodos paraprevinir el null, ese es el problema
+            
+        }else{
+            
+            return null;
+        }
     }
 
 

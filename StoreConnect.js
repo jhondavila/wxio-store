@@ -1,6 +1,6 @@
 import React from 'react';
 export const connectToStore = (WrappedComponent, stores) => {
-    return class StoreComponent extends React.Component {
+    class StoreConnect extends React.Component {
         constructor(props) {
             super(props);
             // debugger
@@ -16,6 +16,7 @@ export const connectToStore = (WrappedComponent, stores) => {
                 store.on("add", this.handleChange)
                 store.on("loading", this.handleChange)
                 store.on("remove", this.handleChange)
+                store.on("import", this.handleImport);
 
                 // 
                 if (store.autoLoad) {
@@ -34,11 +35,22 @@ export const connectToStore = (WrappedComponent, stores) => {
                 store.removeListener("add", this.handleChange);
                 store.removeListener("loading", this.handleChange);
                 store.removeListener("remove", this.handleChange);
+                store.removeListener("import", this.handleImport);
+
             }
             // }
         }
+        handleImport = () => {
+            if (this.component) {
+                if (this.component.onImport) {
+                    this.component.onImport();
+                }
+            }
+            this.forceUpdate();
+        }
 
         handleChange = () => {
+            console.log(this.props.forwardedRef)
             if (this.component) {
                 if (this.component.onStoreDataChanged) {
                     this.component.onStoreDataChanged();
@@ -48,8 +60,15 @@ export const connectToStore = (WrappedComponent, stores) => {
         }
 
         render() {
-            return <WrappedComponent ref={c => this.component = c} {...this.props} />;
+            return <WrappedComponent ref={(c) => {
+                this.component = c;
+                this.props.forwardedRef(c);
+            }} {...this.props} />;
         }
     }
+
+    return React.forwardRef((props, ref) => {
+        return <StoreConnect {...props} forwardedRef={ref} />;
+    });
 }
 

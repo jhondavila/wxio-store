@@ -11,6 +11,9 @@ class FInteger extends Field {
         this.isNumeric = true;
         this.isIntegerField = true;
         this.numericType = 'int';
+
+        this.stripRe =  /[\$,%]/g;
+
     }
 
     convert(v) {
