@@ -192,7 +192,7 @@ class Store extends EventEmitter {
         this.start = (page - 1) * this.pageSize;
         this.limit = this.pageSize;
         this.currentPage = page;
-        
+
         try {
             this.loading = true;
             this.emit("loading", this, true);
@@ -544,7 +544,10 @@ class Store extends EventEmitter {
         let model = this.getById(id);
         this.remove(model);
     }
-
+    removeAll() {
+        let models = this.data.slice(0);
+        this.remove(models);
+    }
     remove(models) {
         if (!Core.isArray(models)) {
             models = [models];
