@@ -28,6 +28,10 @@ Examples for use store class, model and events.
     - [Get records from Store](#get-records-from-store)
     - [Synchronize changes of Store](#synchronize-changes-of-store)
     - [Cancel changes in Store](#cancel-changes-in-store)
+    - [Check needs sync Store](#check-needs-sync-store)
+    - [Remove all records from Store](#remove-all-records-from-store)
+    - [Remove record by id from Store](#remove-record-by-id-from-store)
+    - [get index record from store](#get-index-record-from-store)
 
 </details>
 
@@ -364,7 +368,7 @@ Method getAt - return a record based on store position
   import { Store } from "wxio-store"
 
   let store = new Store({});
-  let records = [
+  store.add([
     {
       amount: "801.91",
       order: 1,
@@ -375,7 +379,7 @@ Method getAt - return a record based on store position
       order: 2,
       vehicle: "Porsche Alpine"
     },
-  ];
+  ]);
  
   let firstRecord = store.getAt(0);//first record
   let secondRecord = store.getAt(1);//second record
@@ -387,18 +391,18 @@ Method getById - return a record based "id"
   import { Store } from "wxio-store"
 
   let store = new Store({});
-  let records = [
+  store.add([
     {
-      id : 1,
       amount: "801.91",
+      id : 1,
       vehicle: "Jaguar Challenger"
     },
     {
-      id : 2,
       amount: "595.75",
+      id: 2,
       vehicle: "Porsche Alpine"
     },
-  ];
+  ]);
  
   let record = store.getById(1);
 ```
@@ -410,7 +414,7 @@ Method getById - return a record based "id"
 
   
   let store = new Store({});
-  let records = [
+  store.add([
     {
       amount: "801.91",
       order: 1,
@@ -421,7 +425,7 @@ Method getById - return a record based "id"
       order: 2,
       vehicle: "Porsche Alpine"
     },
-  ];
+  ]);
  
   let firstRecord = store.getAt(0);//first record
   let secondRecord = store.getAt(1);//second record
@@ -440,7 +444,7 @@ Cancel changes not sent to server / not commit
   import { Store } from "wxio-store"
 
   let store = new Store({});
-  let records = [
+  store.add([
     {
       amount: "801.91",
       order: 1,
@@ -451,7 +455,8 @@ Cancel changes not sent to server / not commit
       order: 2,
       vehicle: "Porsche Alpine"
     },
-  ];
+  ]);
+  
  
   let firstRecord = store.getAt(0);//first record
   let secondRecord = store.getAt(1);//second record
@@ -461,4 +466,109 @@ Cancel changes not sent to server / not commit
 
   store.cancelChanges();
   
+```
+
+
+### Check needs sync Store
+```js
+  import { Store } from "wxio-store"
+
+  let store = new Store();
+  store.needsSync();
+
+```
+```js
+  import { Store } from "wxio-store"
+
+  let store = new Store();
+  store.changed();//return true/false
+
+```
+
+
+### Remove all records from Store
+```js
+  import { Store } from "wxio-store"
+
+  let store = new Store();
+  ...
+  store.removeAll();
+  store.count()//return 0;
+
+```
+### Remove record by id from Store
+```js
+  import { Store } from "wxio-store"
+
+  let store = new Store();
+  store.add([
+    {
+      amount: "801.91",
+      id : 1,
+      vehicle: "Jaguar Challenger"
+    },
+    {
+      amount: "595.75",
+      id: 2,
+      vehicle: "Porsche Alpine"
+    },
+  ]);
+
+  store.removeById(1);
+  store.count()// return 1
+
+```
+
+
+### get index record from store
+
+Method indexOf (record)
+```js
+  import { Store , createModel} from "wxio-store"
+
+  let store = new Store();
+  let recordJaguar =  new store.model({
+      id : 1,
+      amount: "801.91",
+      vehicle: "Jaguar Challenger"
+  });
+
+  let recordPorsche =  new store.model({
+      id: 2,
+      amount: "595.75",
+      vehicle: "Porsche Alpine"
+  });
+  
+  store.add(recordJaguar);
+  store.add(recordPorsche);
+
+  store.indexOf(recordJaguar);//return 0
+  store.indexOf(recordPorsche);//return 1
+
+```
+
+
+Method indexOfId (record)
+```js
+  import { Store , createModel} from "wxio-store"
+
+  let store = new Store();
+  let recordJaguar =  new store.model({
+      id : 1,
+      amount: "801.91",
+      vehicle: "Jaguar Challenger"
+  });
+
+  let recordPorsche =  new store.model({
+      id: 2,
+      amount: "595.75",
+      vehicle: "Porsche Alpine"
+  });
+  
+  store.add(recordJaguar);
+  store.add(recordPorsche);
+
+  store.indexOfId(1); //return 0
+  store.indexOfId(2); //return 1
+
 ```
