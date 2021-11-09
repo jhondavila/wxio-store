@@ -73,6 +73,7 @@ class Store extends EventEmitter {
 
     _isStore = true;
 
+    isLoaded = false;
     constructor(opts) {
         super(opts);
         // if (opts.proxy) {
@@ -89,6 +90,11 @@ class Store extends EventEmitter {
             this.setStaticFilters(opts.staticFilters);
         }
         this.pageSize = opts.pageSize || this.pageSize;
+
+
+        this.once("load", () => {
+            this.isLoaded = true;
+        })
     }
 
 
@@ -226,6 +232,9 @@ class Store extends EventEmitter {
 
 
     async load() {
+        if (this.loading) {
+            return;
+        }
         try {
             this.loading = true;
             this.emit("loading", this, true);
