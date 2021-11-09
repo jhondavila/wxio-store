@@ -140,7 +140,7 @@ class BaseModel {
                 let single = Core.isString(property);
                 let attributes;
 
-                let { initialized } = options;
+                let { initialized, silent } = options;
                 if (single) {
                     attributes = {};
                     attributes[property] = v;
@@ -217,11 +217,14 @@ class BaseModel {
                     }
                 }
 
-                if (changeId) {
-                    this.callJoinCollection("onIdChanged", this, oldId, newId);
+                if (!silent) {
+                    if (changeId) {
+                        this.callJoinCollection("onIdChanged", this, oldId, newId);
+                    }
+
+                    this.callJoinCollection("onDataChanged", this);
                 }
 
-                this.callJoinCollection("onDataChanged", this);
 
             }
 
@@ -807,24 +810,24 @@ class BaseModel {
 
         Model.schemaValidator.disabledRule = (field) => {
             let rule = schemaValidator.rules[field];
-            if(rule){
+            if (rule) {
                 schemaValidator.disabledRules = schemaValidator.disabledRules || {};
                 schemaValidator.disabledRules[field] = rule;
                 delete schemaValidator.rules[field];
                 return true;
-            }else{
+            } else {
                 return false;
             }
-            
+
         }
 
         Model.schemaValidator.enabledRule = (field) => {
             schemaValidator.disabledRules = schemaValidator.disabledRules || {};
-            if(schemaValidator.disabledRules[field]){
+            if (schemaValidator.disabledRules[field]) {
                 let rule = schemaValidator.disabledRules[field];
                 schemaValidator.rules[field] = rule;
                 return true;
-            }else{
+            } else {
                 return false;
             }
         }

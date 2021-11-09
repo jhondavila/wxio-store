@@ -843,7 +843,6 @@ class Store extends EventEmitter {
      * @private
      */
     onDataChanged(record) {
-
         this.applySorters();
         this.nestedUpdate();
         this.emit("update", this, record);
@@ -888,16 +887,20 @@ class Store extends EventEmitter {
         let oldIndex = this.data.indexOf(model);
         let newIndex = oldIndex == 0 ? 0 : oldIndex - 1;
         this.moveTo(model, newIndex, (rec, index) => {
-            rec.set(property, index);
+            rec.set(property, index + 1, { silent: true });
         });
+        this.applySorters();
+        this.nestedUpdate();
     }
     moveDown(model, property = "order") {
         let cloneArray = this.data.slice(0);
         let oldIndex = cloneArray.indexOf(model);
         let newIndex = oldIndex + 1;
         this.moveTo(model, newIndex, (rec, index) => {
-            rec.set(property, index);
+            rec.set(property, index + 1, { silent: true });
         });
+        this.applySorters();
+        this.nestedUpdate();
     }
 
 
