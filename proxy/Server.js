@@ -64,12 +64,14 @@ class ProxyServer extends ProxyBase {
             }
         }
 
-
-        let extraParams = this.parseExtraParams();
+        
         let params = {
             filter: JSON.stringify(parseFilters),
         };
-        Object.assign(params, extraParams);
+        if(opts && opts.ignoreExtraParams !== true){
+            let extraParams = this.parseExtraParams();
+            Object.assign(params, extraParams);
+        }
         let response = await Request({
             method: this.methods["read"],
             url: this.api["read"],
