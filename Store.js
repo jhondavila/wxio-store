@@ -706,7 +706,7 @@ class Store extends EventEmitter {
                 } else {
                     return false;
                 }
-
+                
             }
         } else {
             return true;

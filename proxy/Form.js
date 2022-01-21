@@ -26,6 +26,10 @@ class ProxyForm extends ProxySever {
                     ...this.headers
                 }
             });
+            if (this.mode == "batch") {
+                await this.getNestedSync(operations.create);
+                // await this.getNestedSync(operations.update);
+            }
             let status = this.processCreate(operations.create, response, store);
         }
 
@@ -48,11 +52,11 @@ class ProxyForm extends ProxySever {
                     ...this.headers
                 }
             });
+            if (this.mode == "batch") {
+                // await this.getNestedSync(operations.create);
+                await this.getNestedSync(operations.update);
+            }
             let status = this.processUpdate(operations.update, response, store);
-        }
-        if (this.mode == "batch") {
-            await this.getNestedSync(operations.create);
-            await this.getNestedSync(operations.update);
         }
 
 

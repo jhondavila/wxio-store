@@ -292,6 +292,7 @@ class ProxyServer extends ProxyBase {
             let status = this.processUpdate(operations.update, response, store);
         }
         if (this.mode == "batch") {
+            debugger
             await this.getNestedSync(operations.create);
             await this.getNestedSync(operations.update);
         }
