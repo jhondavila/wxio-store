@@ -10,7 +10,6 @@ class WTools extends React.Component {
 
         this.stores = Array.prototype.slice.call(this.props.store);
         //console.log(this.props.store);
-        window.store = this.stores;
     }
 
     _onChange = () => {
