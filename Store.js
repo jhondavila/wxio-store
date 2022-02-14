@@ -703,6 +703,8 @@ class Store extends EventEmitter {
                         request: error.request,
                         response: Core.JSON.decode(error.request.responseText, true)
                     };
+                }else if(options && options.throw){
+                    throw error;
                 } else {
                     return false;
                 }

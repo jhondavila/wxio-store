@@ -6,6 +6,73 @@ import * as _ from "lodash";
 class ProxyForm extends ProxySever {
 
 
+    async modeInclude(operations, params) {
+        let store = this.store;
+        // debugger
+        if (operations.create) {
+            let data = this.getCreateData(operations.create, store);
+            params.data = JSON.stringify(data);
+
+            let formData = new FormData();
+            for (let p in params) {
+                Core.parseToForm(formData, p, params[p]);
+            }
+
+            let response = await Request({
+                method: this.methods["create"],
+                url: this.api["create"],
+                data : formData,
+                // params: params,
+                headers: {
+                    ...this.headers
+                }
+            });
+            let status = this.processCreate(operations.create, response, store);
+        }
+
+
+        if (operations.update) {
+            let data = this.getUpdateData(operations.update, store);
+            params.data = JSON.stringify(data);
+            let formData = new FormData();
+            for (let p in params) {
+                Core.parseToForm(formData, p, params[p]);
+            }
+            let response = await Request({
+                method: this.methods["update"],
+                url: this.api["update"],
+                // params: params,
+                data: formData,
+                headers: {
+                    ...this.headers
+                }
+            });
+            let status = this.processUpdate(operations.update, response, store);
+        }
+
+
+        if (operations.destroy) {
+            let data = this.getDestroyData(operations.destroy, store);
+            params.data = JSON.stringify(data);
+            let formData = new FormData();
+            for (let p in params) {
+                Core.parseToForm(formData, p, params[p]);
+            }
+
+            let response = await Request({
+                method: this.methods["destroy"],
+                url: this.api["destroy"],
+                // params: params,
+                data: formData,
+                headers: {
+                    ...this.headers
+                }
+            });
+            let status = this.processDestroy(operations.destroy, response, store);
+        }
+    }
+
+
     async batchSimple(operations, params) {
         let store = this.store;
 
