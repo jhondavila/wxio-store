@@ -284,6 +284,13 @@ class Store extends EventEmitter {
         this.mapping = {};
     }
 
+  
+     clear() {
+        this.data.splice(0);
+        this.mapping = {};
+        this.removed.splice(0);
+    }
+
 
     add(models, cancelFireEvent) {
         if (!models) {
