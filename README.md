@@ -200,6 +200,157 @@ Simple use store
 ```
 
 
+Proxy type
+
+| `type`      | Description                                                 |
+| ----------- | ----------------------------------------------------------- |
+| `"ajax"`  | sent data to server as the request URL parameters |
+| `"form"` | sent data to server as the request body Only applicable for request methods 'PUT', 'POST', 'DELETE                            |
+| `"localstorage"` | use localstorage from browser to save data                            |
+
+
+Proxy mode
+
+| `type`      | Description                                                 |
+| ----------- | ----------------------------------------------------------- |
+| `"batch"`  |send nested data to server with settings for each nested store |
+| `"include"` | send data nested to server with store root |
+
+
+
+Config store proxy (remote data)
+```js
+import { Store } from "wxio-store"
+
+  
+const storeQuestions = new Store({
+    fields: {
+        question: {
+            type: "string"
+        },
+        order: {
+            type: "number"
+        },
+        is_root: {
+            type: "number"
+        },
+        swt_status: {
+            type: "boolean"
+        }
+    },
+    proxy: {
+        type: "ajax",
+        api: {
+            read: "/read",
+            create: "/create",
+            update: "/update",
+            destroy: "/destroy"
+        }
+    }
+});
+
+...
+storeQuestions.add({...})
+...
+
+storeQuestions.sync();//return promise
+
+```
+
+
+
+
+Config store proxy nested
+```js
+import { Store } from "wxio-store"
+
+  
+const storeQuestions = new Store({
+    fields: {
+        question: {
+            type: "string"
+        },
+        options: {
+            type: "store",
+            fields: {
+                id: { //important define id field
+                    type: "integer",
+                    critical: true,
+                    reference: {
+                        parent: true
+                    }
+                },
+                name: {
+                    type: "text",
+                },
+                order: {
+                    type: "number",
+                    critical: true
+                },
+                swt_comment: {
+                    type: "boolean"
+                }
+            },
+            sorters: [
+                {
+                    property: "order",
+                    direction: "ASC"
+                }
+            ],
+            proxy: {
+                type: "ajax",
+                api: {
+                    read: "/quest/option/read",
+                    create: "/quest/option/create",
+                    update: "/quest/option/update",
+                    destroy: "/quest/option/destroy"
+                }
+            }
+        },
+        order: {
+            type: "number"
+        },
+        swt_status: {
+            type: "boolean"
+        }
+    },
+    proxy: {
+        mode: "batch",// (batch|include) <= Important config "mode" with nested store
+        type: "ajax",
+        api: {
+            read: "/quest/read",
+            create: "/quest/create",
+            update: "/quest/update",
+            destroy: "/quest/destroy"
+        }
+    }
+});
+
+...
+storeQuestions.add([
+  {
+    question : "Question A.",
+    options : [
+      {name : "Answer A",order : 1},{name : "Answer B", order : 2},
+    ],
+    order  : 1
+  },
+  {
+    question : "Question B.",
+    options : [
+      {name : "Answer A",order : 1},{name : "Answer B", order : 2},
+    ],
+    order  : 2
+  }
+])
+...
+
+storeQuestions.sync();//return promise
+
+```
+
+
+
 Add array to store
 ```js
   import { Store } from "wxio-store"
