@@ -591,14 +591,9 @@ class BaseModel {
                 let changed = [];
                 let fieldsMap = this._fields;
 
-                let data = this.getData({
-                    serialize: true,
-                    persist: true,
-                    nested: false
-                });
                 for (let attribute in this._attributes) {
-                    let value = this._attributes[attribute];
                     let field = fieldsMap[attribute];
+                    let value = this._attributes[attribute];
                     if (field && !field.persist) {
                         continue;
                     }
@@ -607,10 +602,16 @@ class BaseModel {
                             continue;
                         }
                     } else if (field) {
-                        if (field.isEqual(data[attribute], this.saved(attribute))) {
+                        if (field.serialize) {
+                            value = field.serialize(value, this, options);
+                        }
+                        if (field.isEqual(value, this.saved(attribute))) {
                             continue;
                         }
                     } else {
+                        if (field.serialize) {
+                            value = field.serialize(value, this, options);
+                        }
                         if (_.isEqual(value, this.saved(attribute))) {
                             continue;
                         }

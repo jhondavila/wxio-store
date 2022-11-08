@@ -1,5 +1,6 @@
 import Integer from './Integer';
-// import Wx from 'Wx';
+import Utils from '../Utils';
+import * as _ from 'lodash';
 
 class FNumber extends Integer {
 
@@ -38,6 +39,10 @@ class FNumber extends Integer {
         return parseFloat(String(v).replace(this.stripRe, ''));
     }
 
+
+    isEqual(value1, value2) {
+        return (Utils.isEmpty(value1) && Utils.isEmpty(value2)) || _.isEqual(value1, value2);
+    }
     
 }
 export default FNumber;

@@ -1,5 +1,6 @@
 import Field from './Field';
-
+import Utils from '../Utils';
+import * as _ from 'lodash';
 
 class FString extends Field {
 
@@ -17,6 +18,15 @@ class FString extends Field {
     // getType() {
     //     return 'string';
     // }
+    isEqual(value1, value2) {
+        // console.log((Utils.isEmpty(value1) ,Utils.isEmpty(value2)), _.isEqual(value1, value2));
+        // return () || _.isEqual(value1, value2);
+        if(Utils.isEmpty(value1) && Utils.isEmpty(value2)){
+            return true;
+        }else {
+            return _.isEqual(value1, value2);
+        }
+    }
 }
 
 export default FString;

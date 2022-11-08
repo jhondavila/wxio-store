@@ -1,5 +1,6 @@
 import Field from './Field';
-
+import Utils from '../Utils';
+import * as _ from 'lodash';
 // import PathVal from "../../util/Path";
 
 class FInteger extends Field {
@@ -12,7 +13,7 @@ class FInteger extends Field {
         this.isIntegerField = true;
         this.numericType = 'int';
 
-        this.stripRe =  /[\$,%]/g;
+        this.stripRe = /[\$,%]/g;
 
     }
 
@@ -61,6 +62,9 @@ class FInteger extends Field {
         return parseInt(v, 10);
     }
 
+    isEqual(value1, value2) {
+        return (Utils.isEmpty(value1) && Utils.isEmpty(value2)) || _.isEqual(value1, value2);
+    }
 }
 
 export default FInteger;

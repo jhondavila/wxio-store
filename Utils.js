@@ -132,6 +132,13 @@ export default {
             }
         });
         return target;
-    }
-  
+    },
+    isEmpty: function (value, allowEmptyString) {
+        return (
+            value == null ||
+            (!allowEmptyString ? value === "" : false) ||
+            (this.isArray(value) && value.length === 0)
+        );
+    },
+    isArray: Array.isArray,
 };
