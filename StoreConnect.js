@@ -64,7 +64,9 @@ export const connectToStore = (WrappedComponent, stores) => {
             return <WrappedComponent
                 ref={(c) => {
                     this.component = c;
-                    this.props.forwardedRef(c);
+                    if(this.props.forwardedRef){
+                        this.props.forwardedRef(c);
+                    }
                 }}
                 {...this.props}
 

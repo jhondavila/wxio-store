@@ -163,7 +163,7 @@ class BaseModel {
                     }
                     value = this.convert(attribute, value);
 
-                    let previous = this.get(attribute);
+                    let previous = initialized ?  value : this.get(attribute);
 
                     let changed;
 
@@ -206,9 +206,11 @@ class BaseModel {
                         }
                     }
 
-
+                    
                     if (changed) {
-                        this.setDirty(true);
+                        if(!initialized){
+                            this.setDirty(true);
+                        }
                         if (this.idProperty === attribute) {
                             changeId = true;
                             oldId = previous;
@@ -589,6 +591,11 @@ class BaseModel {
                 let changed = [];
                 let fieldsMap = this._fields;
 
+                let data = this.getData({
+                    serialize: true,
+                    persist: true,
+                    nested: false
+                });
                 for (let attribute in this._attributes) {
                     let value = this._attributes[attribute];
                     let field = fieldsMap[attribute];
@@ -600,7 +607,7 @@ class BaseModel {
                             continue;
                         }
                     } else if (field) {
-                        if (field.isEqual(value, this.saved(attribute))) {
+                        if (field.isEqual(data[attribute], this.saved(attribute))) {
                             continue;
                         }
                     } else {
