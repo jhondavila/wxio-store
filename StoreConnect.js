@@ -23,6 +23,7 @@ export const connectToStore = (WrappedComponent, stores) => {
             if (store) {
                 store.on("add", this.handleChange)
                 store.on("loading", this.handleChange)
+                store.on("update", this.handleChange)
                 store.on("remove", this.handleChange)
                 store.on("import", this.handleImport);
                 if (store.autoLoad && !store.isLoaded) {
@@ -34,6 +35,7 @@ export const connectToStore = (WrappedComponent, stores) => {
         removeEventsToStore(store) {
             if (store) {
                 store.removeListener("add", this.handleChange);
+                store.removeListener("update", this.handleChange);
                 store.removeListener("loading", this.handleChange);
                 store.removeListener("remove", this.handleChange);
                 store.removeListener("import", this.handleImport);
