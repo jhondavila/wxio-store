@@ -140,7 +140,7 @@ class BaseModel {
                 let single = Core.isString(property);
                 let attributes;
 
-                let { initialized, silent } = options;
+                let { initialized, silent, initializedSubStore } = options;
                 if (single) {
                     attributes = {};
                     attributes[property] = v;
@@ -168,6 +168,7 @@ class BaseModel {
                     let changed;
 
                     if (field && field.isNested) {
+                        previous = this.get(attribute);//fix ignorando value cuando inicializamos
                         if (previous) {
                             field.applySet(previous, value);
                             changed = field.changed(previous);
@@ -206,9 +207,9 @@ class BaseModel {
                         }
                     }
 
-                    
+
                     if (changed) {
-                        if(!initialized){
+                        if (!initialized) {
                             this.setDirty(true);
                         }
                         if (this.idProperty === attribute) {
